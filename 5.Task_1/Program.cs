@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +12,11 @@ namespace _5.Task_1
         {
             Dictionary<string, string> vocabulary = new Dictionary<string, string>();
             vocabulary.Add("Word", "value");
+            CheckingValueWords(vocabulary);
+        }
 
+        static void CheckingValueWords(Dictionary<string, string> vocabulary)
+        {
             string userInput = Console.ReadLine();
 
             if (vocabulary.ContainsKey(userInput))
