@@ -12,10 +12,10 @@ namespace _5.Task_1
         {
             Dictionary<string, string> vocabulary = new Dictionary<string, string>();
             vocabulary.Add("Word", "value");
-            CheckingValueWords(vocabulary);
+            FindingTheMeaningWords(vocabulary);
         }
 
-        static void CheckingValueWords(Dictionary<string, string> vocabulary)
+        static void FindingTheMeaningWords(Dictionary<string, string> vocabulary)
         {
             string userInput = Console.ReadLine();
 
@@ -23,7 +23,6 @@ namespace _5.Task_1
             {
                 Console.WriteLine(vocabulary[userInput]);
             }
-
             else
             {
                 Console.WriteLine("Wrong word, please try again");
