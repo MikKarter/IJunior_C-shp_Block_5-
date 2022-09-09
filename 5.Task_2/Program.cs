@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,12 +56,14 @@ namespace _5.Task_2
             {
                 buyers.Enqueue(purchaseCost.Next(lowerRandomNumber, upperRandomNumber));
             }
+
             return buyers;
         }
 
         static void ServeAllQueue(Queue<int> buyers, ref int countBuyers, ref int countPurchase)
         {
             Console.WriteLine("Для обслуживания следующего клиента нажмите любую клавишу");
+
             while (buyers.Count>0)
             {
                 Console.Clear();
