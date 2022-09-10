@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,21 +9,20 @@ namespace _5.Тфыл_3
     internal class Program
     {
         static void Main(string[] args)
-        {           
+        {
             List<int> numbers = new List<int>();
-            GetNumber(ref numbers);
+            GetNumber(numbers);
         }
 
-        static void GetNumber(ref List<int> numbers)
+        static void GetNumber(List<int> numbers)
         {
-            bool isWork = true;  
+            bool isWork = true;
 
             while (isWork)
-            {     
+            {
                 string userInput = Console.ReadLine();
-                int.TryParse(userInput, out int resaultParse);
 
-                if (resaultParse != 0)
+                if (int.TryParse(userInput, out int resaultParse) != false)
                 {
                     numbers.Add(resaultParse);
                 }
