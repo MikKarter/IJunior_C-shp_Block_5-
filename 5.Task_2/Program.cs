@@ -28,7 +28,7 @@ namespace _5.Task_2
                 string userInput = Console.ReadLine();
                 int.TryParse(userInput, out int resaultParse);
 
-                if (resaultParse != 0)
+                if (resaultParse >= 0)
                 {
                     resault = resaultParse;
                     isWork = false;
