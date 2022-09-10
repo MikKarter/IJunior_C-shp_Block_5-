@@ -17,7 +17,7 @@ namespace _5.Task_2
             ServeAllQueue(buyers, ref countAllBuyers, ref countAllPurchase);
         }
 
-        static int GetNumber()
+        static int GetQueuePeopleNumber()
         {
             bool isWork = true;
             int resault = 0;
@@ -50,7 +50,7 @@ namespace _5.Task_2
             int upperRandomNumber = 1000;
 
             Queue<int> buyers = new Queue<int>();
-            int amountBuyers = GetNumber();
+            int amountBuyers = GetQueuePeopleNumber();
 
             for (int i = 0; i < amountBuyers; i++)
             {
