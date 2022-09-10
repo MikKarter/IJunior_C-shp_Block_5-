@@ -12,10 +12,10 @@ namespace _5.Task_1
         {
             Dictionary<string, string> vocabulary = new Dictionary<string, string>();
             vocabulary.Add("Word", "value");
-            FindingTheMeaningWords(vocabulary);
+            FindMeaningWords(vocabulary);
         }
 
-        static void FindingTheMeaningWords(Dictionary<string, string> vocabulary)
+        static void FindMeaningWords(Dictionary<string, string> vocabulary)
         {
             string userInput = Console.ReadLine();
 
