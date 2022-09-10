@@ -11,11 +11,10 @@ namespace _5.Тфыл_3
         static void Main(string[] args)
         {
             List<int> numbers = new List<int>();
-
-            ProcessCommand(numbers);
+            ProcessCommands(numbers);
         }
 
-        static void ProcessCommand(List<int> numbers)
+        static void ProcessCommands(List<int> numbers)
         {
             bool isWork = true;
 
@@ -40,7 +39,7 @@ namespace _5.Тфыл_3
                 }
                 else
                 {
-                    Console.WriteLine("Input error. Please, input sum or exit for actions:");
+                    Console.WriteLine("Input error. Please, input" + sum + " or " +exit + " for actions:");
                 }
             }
         }
