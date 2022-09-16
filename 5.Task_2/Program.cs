@@ -1,88 +1,196 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
-namespace _5.Task_2
+namespace _6.Task_3
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            int countAllPurchase = 0;
-            int countAllBuyers = 0;
-            Queue<int> buyers = CreatingQueue();         
-            ServeAllQueue(buyers, ref countAllBuyers, ref countAllPurchase);
-        }
-
-        static int GetQueuePeopleNumber()
-        {
+            const string CommandAddCharacter = "1";
+            const string CommandUnlockCharacter = "2";
+            const string CommandLockCharacter = "3";
+            const string CommandDeleteCharacter = "4";
+            const string CommandShowCharacterList = "5";
+            const string CommandExit = "6";
             bool isWork = true;
-            int resault = 0;
+
+            Database database = new Database();
 
             while (isWork)
             {
-                Console.WriteLine("How much people in queue you see?");
-                string userInput = Console.ReadLine();
-                int.TryParse(userInput, out int resaultParse);
+                Console.WriteLine(CommandAddCharacter + ". - Add charater");
+                Console.WriteLine(CommandUnlockCharacter + ". - Unlock charater");
+                Console.WriteLine(CommandLockCharacter + ". - Lock charater");
+                Console.WriteLine(CommandDeleteCharacter + ". - Delete charater");
+                Console.WriteLine(CommandShowCharacterList + ". - Show charater list");
+                Console.WriteLine(CommandExit + ". - EXIT");
+                string command = Console.ReadLine();
 
-                if (resaultParse >= 0)
+                switch (command)
+                {
+                    case CommandAddCharacter:
+                        database.AddCharacter();
+                        break;
+                    case CommandUnlockCharacter:
+                        database.UnlockCharacter();
+                        break;
+                    case CommandLockCharacter:
+                        database.LockCharacter();
+                        break;
+                    case CommandDeleteCharacter:
+                        database.DeleteCharacter();
+                        break;
+                    case CommandShowCharacterList:
+                        database.ShowCharacterList();
+                        break;
+                    case CommandExit:
+                        isWork = false;
+                        break;
+                }
+            }
+        }
+    }
+
+    static class UserUtils
+    {
+        static public int TryGetNumber()
+        {
+            int resault = 0;
+            bool isWork = true;
+
+            while (isWork)
+            {
+                string userInput = Console.ReadLine();
+                bool success = int.TryParse(userInput, out int resaultParse);
+
+                if (resaultParse >= 0 && success == true)
                 {
                     resault = resaultParse;
                     isWork = false;
                 }
-
                 else
                 {
-                    Console.WriteLine("Input error. Please, input any number:");
+                    Console.WriteLine("Input error. Please, input number:");
                 }
             }
 
             return resault;
         }
+    }
 
-        static Queue<int> CreatingQueue()
+    class Database
+    {
+        private List<Character> _characters = new List<Character>();
+
+        public void AddCharacter()
         {
-            Random purchaseCost = new Random();
-            int lowerRandomNumber = 50;
-            int upperRandomNumber = 1000;
-
-            Queue<int> buyers = new Queue<int>();
-            int amountBuyers = GetQueuePeopleNumber();
-
-            for (int i = 0; i < amountBuyers; i++)
-            {
-                buyers.Enqueue(purchaseCost.Next(lowerRandomNumber, upperRandomNumber));
-            }
-
-            return buyers;
+            Console.WriteLine("Input NickName you Character:");
+            string nickname = Console.ReadLine();
+            Console.WriteLine("Input level you Character:");
+            int level = UserUtils.TryGetNumber();
+            Character character = new Character(nickname, level);
+            _characters.Add(character);
         }
 
-        static void ServeAllQueue(Queue<int> buyers, ref int countBuyers, ref int countPurchase)
+        public void UnlockCharacter()
         {
-            Console.WriteLine("Для обслуживания следующего клиента нажмите любую клавишу");
+            Console.WriteLine("Input ID Characters for unlock:");
+            int idCharacterInput = Convert.ToInt32(Console.ReadLine());
+            TryGetPlayerAcess(idCharacterInput);
+        }
 
-            while (buyers.Count>0)
+        public void LockCharacter()
+        {
+            Console.WriteLine("Input ID Characters for lock:");
+            int idCharacterInput = Convert.ToInt32(Console.ReadLine());
+            TryGetPlayerAcess(idCharacterInput);
+        }
+
+        public void DeleteCharacter()
+        {
+            Console.WriteLine("Input ID Characters for delete:");
+            int idCharacterInput = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < _characters.Count; i++)
             {
-                Console.Clear();
-                countBuyers = buyers.Count;                               
-                Console.SetCursorPosition(0, 20);                
-                Console.WriteLine("Amount people in the Queue - " + countBuyers);
-                Console.WriteLine("Revenue for today - " + countPurchase);
-                Console.SetCursorPosition(0, 0);
-                Console.WriteLine("Для обслуживания следующего клиента нажмите любую клавишу");
-                Console.ReadKey();                
-                countPurchase += buyers.Peek();
-                buyers.Dequeue();                
+                if (_characters[i].IdCharacter == idCharacterInput)
+                {
+                    _characters.RemoveAt(i);
+                }
             }
+        }
 
-            countBuyers = buyers.Count;
-            Console.Clear();
-            Console.SetCursorPosition(0, 20);
-            Console.WriteLine("Amount people in the Queue - " + countBuyers);
-            Console.WriteLine("Revenue for today - " + countPurchase);
+        public void ShowCharacterList()
+        {
+            for (int i = 0; i < _characters.Count; i++)
+            {
+                _characters[i].ShowCharacterInfo();
+            }
+        }
+
+        private void TryGetPlayerAcess(int idCharacterInput)
+        {
+            for (int i = 0; i < _characters.Count; i++)
+            {
+                if (idCharacterInput == _characters[i].IdCharacter && _characters[i].IsUnlocked == false)
+                {
+                    _characters[i].LockCharacter();
+                }
+                else if (idCharacterInput == _characters[i].IdCharacter && _characters[i].IsUnlocked == true)
+                {
+                    _characters[i].UnlockCharacter();
+                }
+            }
+        }
+    }
+
+    class Character
+    {
+        private static int _idCount = 0;
+        private string _nickname;
+        private int _levelCharacter;
+
+        public int IdCharacter { get; private set; }
+
+        public bool IsUnlocked { get; private set; }
+
+        public Character(string name, int levelCharacter)
+        {
+            _idCount += 1;
+            _nickname = name;
+            _levelCharacter = levelCharacter;
+            IdCharacter = _idCount;
+            IsUnlocked = false;
+        }
+
+        public void ShowCharacterInfo()
+        {
+            Console.Write(IdCharacter + ". " + _nickname + " level " + _levelCharacter);
+
+            if (IsUnlocked == false)
+            {
+                Console.WriteLine(" LOCKED");
+            }
+            else if (IsUnlocked == true)
+            {
+                Console.WriteLine(" UNLOCKED");
+            }
+        }
+
+        public void LockCharacter()
+        {
+            IsUnlocked = true;
+        }
+
+        public void UnlockCharacter()
+        {
+            IsUnlocked = false;
         }
     }
 }
